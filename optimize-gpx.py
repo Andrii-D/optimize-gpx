@@ -4,7 +4,7 @@ import gpxpy
 import numpy as np
 from rdp import rdp
 from geopy.distance import distance
-from gpxpy.gpx import GPXTrackSegment, GPXTrackPoint, GPXWaypoint, GPXTrack, GPX
+from gpxpy.gpx import GPXTrackSegment, GPXTrack
 
 
 DISTANCE_THRESHOLD = 500  # Split segment if distance between two points exceeds threshold
@@ -46,8 +46,11 @@ def split_by_distance(seg, max_distance=DISTANCE_THRESHOLD):
 
 
 filename = sys.argv[1]
+new_filename = filename.replace('.gpx', '') + '-optimized.gpx'
+
 gpx_file = open(filename, 'r')
 gpx = gpxpy.parse(gpx_file)
+
 print('Tracks: ', len(gpx.tracks))
 print('Routes: ', len(gpx.routes))
 print('Waypoints: ', len(gpx.waypoints))
@@ -70,7 +73,9 @@ for track in gpx.tracks:
 print('Total segments: ', total_segments)
 print('Points before: ', points_before)
 print('Points after: ', points_after)
-file = open(filename.replace('.gpx', '') + '-optimized.gpx', 'w')
+print('Saved to ' + new_filename)
+
+file = open(new_filename, 'w')
 file.write(gpx.to_xml())
 file.close()
 
